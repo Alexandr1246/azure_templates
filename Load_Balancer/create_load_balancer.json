@@ -12,19 +12,19 @@
           {
             "name": "itstepFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep', 'subnets/Odesa')]" }
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstep', 'Odesa')]" }
             }
           },
           {
             "name": "workFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/work', 'subnets/office1')]" }
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'work', 'office1')]" }
             }
           },
           {
             "name": "studentFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student', 'subnets/home1')]" }
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'student', 'home1')]" }
             }
           }
         ]
