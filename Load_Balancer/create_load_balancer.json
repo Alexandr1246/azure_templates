@@ -4,49 +4,63 @@
   "resources": [
     {
       "type": "Microsoft.Network/loadBalancers",
-      "apiVersion": "2021-02-01",
+      "apiVersion": "2021-05-01",
       "name": "itstep-internal",
       "location": "[resourceGroup().location]",
       "properties": {
+        "sku": { "name": "Standard" },
         "frontendIPConfigurations": [
           {
             "name": "itstepFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstep', 'Odesa')]" }
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Odesa')]"
+              }
             }
           },
           {
-            "name": "workFrontend",
+            "name": "chernigivFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'work', 'office1')]" }
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Chernigiv')]"
+              }
             }
           },
           {
-            "name": "studentFrontend",
+            "name": "ivanoFrankivskFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'student', 'home1')]" }
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Ivano-Frankivsk')]"
+              }
             }
           }
         ]
       }
     },
     {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "student-external-pip",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": { "name": "Standard" },
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
       "type": "Microsoft.Network/loadBalancers",
-      "apiVersion": "2021-02-01",
+      "apiVersion": "2021-05-01",
       "name": "student-external",
       "location": "[resourceGroup().location]",
       "properties": {
+        "sku": { "name": "Standard" },
         "frontendIPConfigurations": [
           {
-            "name": "studentExternal1Frontend",
+            "name": "studentExternalFrontend",
             "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student_external1', 'subnets/default')]" }
-            }
-          },
-          {
-            "name": "studentExternal2Frontend",
-            "properties": {
-              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student_external2', 'subnets/default')]" }
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses/student-external-pip')]"
+              }
             }
           }
         ]
