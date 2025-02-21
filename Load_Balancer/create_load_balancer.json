@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "apiVersion": "2021-02-01",
+      "name": "itstep-internal",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "itstepFrontend",
+            "properties": {
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep', 'subnets/Odesa')]" }
+            }
+          },
+          {
+            "name": "workFrontend",
+            "properties": {
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/work', 'subnets/office1')]" }
+            }
+          },
+          {
+            "name": "studentFrontend",
+            "properties": {
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student', 'subnets/home1')]" }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "apiVersion": "2021-02-01",
+      "name": "student-external",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "studentExternal1Frontend",
+            "properties": {
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student_external1', 'subnets/default')]" }
+            }
+          },
+          {
+            "name": "studentExternal2Frontend",
+            "properties": {
+              "subnet": { "id": "[resourceId('Microsoft.Network/virtualNetworks/student_external2', 'subnets/default')]" }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
