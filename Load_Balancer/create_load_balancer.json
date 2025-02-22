@@ -20,7 +20,7 @@
             "name": "itstepFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Odesa')]"
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/virtualNetworks/itstep/subnets/Odesa"
               }
             }
           },
@@ -28,7 +28,7 @@
             "name": "chernigivFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Chernigiv')]"
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/virtualNetworks/itstep/subnets/Chernigiv"
               }
             }
           },
@@ -36,7 +36,7 @@
             "name": "ivanoFrankivskFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Ivano-Frankivsk')]"
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/virtualNetworks/itstep/subnets/Ivano-Frankivsk"
               }
             }
           }
@@ -75,7 +75,7 @@
             "name": "studentExternalFrontend1",
             "properties": {
               "publicIPAddress": {
-                "id": "[resourceId('Student', 'Microsoft.Network/publicIPAddresses', 'student-external-pip-1')]"
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/publicIPAddresses/student-external-pip-1"
               }
             }
           },
@@ -83,7 +83,7 @@
             "name": "studentExternalFrontend2",
             "properties": {
               "publicIPAddress": {
-                "id": "[resourceId('Student', 'Microsoft.Network/publicIPAddresses', 'student-external-pip-2')]"
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/publicIPAddresses/student-external-pip-2"
               }
             }
           }
