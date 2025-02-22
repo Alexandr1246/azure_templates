@@ -1,20 +1,26 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    }
+  },
   "resources": [
     {
       "type": "Microsoft.Network/loadBalancers",
       "apiVersion": "2021-05-01",
       "name": "itstep-internal",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
       "properties": {
-        "sku": { "name": "Standard" },
         "frontendIPConfigurations": [
           {
             "name": "itstepFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Odesa')]"
+                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Odesa')]"
               }
             }
           },
@@ -22,7 +28,7 @@
             "name": "chernigivFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Chernigiv')]"
+                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Chernigiv')]"
               }
             }
           },
@@ -30,7 +36,7 @@
             "name": "ivanoFrankivskFrontend",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/itstep/subnets/Ivano-Frankivsk')]"
+                "id": "[resourceId('Student', 'Microsoft.Network/virtualNetworks', 'itstep', 'subnets', 'Ivano-Frankivsk')]"
               }
             }
           }
@@ -40,10 +46,20 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
-      "name": "student-external-pip",
-      "location": "[resourceGroup().location]",
+      "name": "student-external-pip-1",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
       "properties": {
-        "sku": { "name": "Standard" },
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "student-external-pip-2",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
+      "properties": {
         "publicIPAllocationMethod": "Static"
       }
     },
@@ -51,15 +67,23 @@
       "type": "Microsoft.Network/loadBalancers",
       "apiVersion": "2021-05-01",
       "name": "student-external",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
       "properties": {
-        "sku": { "name": "Standard" },
         "frontendIPConfigurations": [
           {
-            "name": "studentExternalFrontend",
+            "name": "studentExternalFrontend1",
             "properties": {
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses/student-external-pip')]"
+                "id": "[resourceId('Student', 'Microsoft.Network/publicIPAddresses', 'student-external-pip-1')]"
+              }
+            }
+          },
+          {
+            "name": "studentExternalFrontend2",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Student', 'Microsoft.Network/publicIPAddresses', 'student-external-pip-2')]"
               }
             }
           }
