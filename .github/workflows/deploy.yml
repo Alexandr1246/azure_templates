@@ -15,9 +15,6 @@ jobs:
     steps:
       - name: Login to Azure
         uses: azure/login@v1
-
-      - name: Login to Azure
-        uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
