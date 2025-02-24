@@ -27,7 +27,7 @@ jobs:
 
     - name: Deploy Virtual Network
       run: |
-        az deployment group create --resource-group Student --template-file Virtual_Network_Azure/create_virtual_network.json
+        az deployment group create --resource-group Student --template-file Load_Balancer/create_virtual_network.json
 
     - name: Deploy Load Balancer
       run: |
