@@ -88,7 +88,11 @@
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'student-external-pip-1')]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'student-external-pip-2')]"
+      ]
     }
   ]
 }
