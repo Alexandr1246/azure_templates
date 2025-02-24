@@ -1,0 +1,142 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "apiVersion": "2021-05-01",
+      "name": "student-external",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "studentExternalFrontend1",
+            "properties": {
+              "publicIPAddress": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/publicIPAddresses/student-external-pip-1"
+              }
+            }
+          },
+          {
+            "name": "studentExternalFrontend2",
+            "properties": {
+              "publicIPAddress": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/publicIPAddresses/student-external-pip-2"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "studentExternalBackendPool",
+            "properties": {
+              "backendIPConfigurations": []
+            }
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "name": "loadBalancingRuleHTTP",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/student-external/frontendIPConfigurations/studentExternalFrontend1"
+              },
+              "backendAddressPool": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/student-external/backendAddressPools/studentExternalBackendPool"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 80,
+              "backendPort": 80,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4
+            }
+          },
+          {
+            "name": "loadBalancingRuleHTTPS",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/student-external/frontendIPConfigurations/studentExternalFrontend2"
+              },
+              "backendAddressPool": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/student-external/backendAddressPools/studentExternalBackendPool"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 443,
+              "backendPort": 443,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "apiVersion": "2021-05-01",
+      "name": "itstep-internal",
+      "location": "[parameters('location')]",
+      "sku": { "name": "Standard" },
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "itstepFrontend",
+            "properties": {
+              "subnet": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/virtualNetworks/itstep/subnets/Odesa"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "itstepBackendPool",
+            "properties": {
+              "backendIPConfigurations": []
+            }
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "name": "loadBalancingRuleRDP",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/itstep-internal/frontendIPConfigurations/itstepFrontend"
+              },
+              "backendAddressPool": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/itstep-internal/backendAddressPools/itstepBackendPool"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 3389,
+              "backendPort": 3389,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4
+            }
+          },
+          {
+            "name": "loadBalancingRuleSSH",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/itstep-internal/frontendIPConfigurations/itstepFrontend"
+              },
+              "backendAddressPool": {
+                "id": "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Network/loadBalancers/itstep-internal/backendAddressPools/itstepBackendPool"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 22,
+              "backendPort": 22,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
