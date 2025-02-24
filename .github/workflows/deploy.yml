@@ -1,0 +1,33 @@
+name: Deploy Azure Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create Resource Group (if not exists)
+        run: |
+          az group create --name Student --location eastus || echo "Resource Group already exists"
+
+      - name: Deploy Virtual Network
+        run: |
+          az deployment group create --resource-group Student --template-file Virtual_Network_Azure/create_virtual_network.json
+
+      - name: Deploy Load Balancer
+        run: |
+          az deployment group create --resource-group Student --template-file Load_Balancer/create_load_balancer.json
