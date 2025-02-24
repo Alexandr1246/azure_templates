@@ -1,3 +1,4 @@
+"""
 on: [push]
 
 name: Run Azure Login With a Service Principal Secret
@@ -24,7 +25,7 @@ jobs:
     - name: Create Resource Group (if not exists)
       run: |
         az group create --name Student --location eastus || echo "Resource Group already exists"
-
+"""
     - name: Deploy Virtual Network
       run: |
         az deployment group create --resource-group Student --template-file Load_Balancer/create_virtual_network.json
@@ -36,3 +37,5 @@ jobs:
     - name: Add Rules
       run: |
         az deployment group create --resource-group Student --template-file Load_Balancer/add_rules.json
+        
+"""

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2021-05-01",
+      "name": "itstep-route-table",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "academy-route",
+            "properties": {
+              "addressPrefix": "10.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "work-route",
+            "properties": {
+              "addressPrefix": "172.16.0.0/16",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "student-route",
+            "properties": {
+              "addressPrefix": "192.168.0.0/24",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2021-05-01",
+      "name": "student-route-table",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "external-network-route-1",
+            "properties": {
+              "addressPrefix": "1.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "external-network-route-2",
+            "properties": {
+              "addressPrefix": "8.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
