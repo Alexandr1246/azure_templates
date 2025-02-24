@@ -1,4 +1,7 @@
 on:
+  push:
+    paths:
+      - 'Load_Balancer/**'
   workflow_dispatch:
 
 name: Run Azure Login With a Service Principal Secret
