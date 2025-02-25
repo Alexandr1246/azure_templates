@@ -9,8 +9,8 @@
       "name": "Mystat",
       "properties": {
         "sku": {
-          "name": "Standard_v2",
-          "tier": "Standard_v2",
+          "name": "Standard",
+          "tier": "Standard",
           "capacity": 2
         },
         "gatewayIPConfigurations": [
@@ -35,7 +35,7 @@
           {
             "name": "privateFrontend",
             "properties": {
-              "privateIPAddress": "192.168.0.4",
+              "privateIPAddress": "192.168.0.10",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'VNet-AppGateW', 'subnet1')]"
               }
@@ -82,10 +82,10 @@
             "properties": {
               "backendAddresses": [
                 {
-                  "ipAddress": "10.0.0.5"
+                  "ipAddress": "192.168.0.20"
                 },
                 {
-                  "ipAddress": "10.0.0.6"
+                  "ipAddress": "192.168.0.21"
                 }
               ]
             }
@@ -98,19 +98,6 @@
               "port": 80,
               "protocol": "Http",
               "cookieBasedAffinity": "Disabled"
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "httpProbe",
-            "properties": {
-              "protocol": "Http",
-              "host": "localhost",
-              "path": "/health",
-              "interval": "30",
-              "timeout": "30",
-              "unhealthyThreshold": "3"
             }
           }
         ]
