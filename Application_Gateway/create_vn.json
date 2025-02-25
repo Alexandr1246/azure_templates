@@ -3,114 +3,31 @@
   "contentVersion": "1.0.0.0",
   "resources": [
     {
-      "type": "Microsoft.Network/applicationGateways",
+      "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
       "location": "eastus",
-      "name": "Mystat",
+      "name": "MystatPublicIP",
       "properties": {
-        "sku": {
-          "name": "Standard_v2",
-          "tier": "Standard_v2",
-          "capacity": 2
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-02-01",
+      "location": "eastus",
+      "name": "VNet-AppGateW",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": ["192.168.0.0/16"]
         },
-        "gatewayIPConfigurations": [
+        "subnets": [
           {
-            "name": "appGatewayConfig",
+            "name": "subnet1",
             "properties": {
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'VNet-AppGateW', 'subnet1')]"
+              "addressPrefix": "192.168.0.0/24",
+              "routeTable": {
+                "id": "[resourceId('Microsoft.Network/routeTables', 'itstep-route-table')]"
               }
-            }
-          }
-        ],
-        "frontendIPConfigurations": [
-          {
-            "name": "publicFrontend",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'MystatPublicIP')]"
-              }
-            }
-          },
-          {
-            "name": "privateFrontend",
-            "properties": {
-              "privateIPAddress": "192.168.0.4",
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'VNet-AppGateW', 'subnet1')]"
-              }
-            }
-          }
-        ],
-        "frontendPorts": [
-          {
-            "name": "httpPort",
-            "properties": {
-              "port": 80
-            }
-          }
-        ],
-        "listeners": [
-          {
-            "name": "publicListener",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'publicFrontend')]"
-              },
-              "frontendPort": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
-              },
-              "protocol": "Http"
-            }
-          },
-          {
-            "name": "privateListener",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'privateFrontend')]"
-              },
-              "frontendPort": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
-              },
-              "protocol": "Http"
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "backendPool",
-            "properties": {
-              "backendAddresses": [
-                {
-                  "ipAddress": "192.168.0.5"
-                },
-                {
-                  "ipAddress": "192.168.0.6"
-                }
-              ]
-            }
-          }
-        ],
-        "backendHttpSettingsCollection": [
-          {
-            "name": "httpSettings",
-            "properties": {
-              "port": 80,
-              "protocol": "Http",
-              "cookieBasedAffinity": "Disabled"
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "httpProbe",
-            "properties": {
-              "protocol": "Http",
-              "host": "localhost",
-              "path": "/health",
-              "interval": "30",
-              "timeout": "30",
-              "unhealthyThreshold": "3"
             }
           }
         ]

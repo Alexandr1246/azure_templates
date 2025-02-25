@@ -5,7 +5,7 @@
     {
       "type": "Microsoft.Network/applicationGateways",
       "apiVersion": "2021-05-01",
-      "location": "[resourceGroup().location]",
+      "location": "eastus",
       "name": "Mystat",
       "properties": {
         "sku": {
@@ -18,7 +18,7 @@
             "name": "appGatewayConfig",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstepVnet', 'appGatewaySubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'VNet-AppGateW', 'subnet1')]"
               }
             }
           }
@@ -28,16 +28,16 @@
             "name": "publicFrontend",
             "properties": {
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'appGatewayPublicIP')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'MystatPublicIP')]"
               }
             }
           },
           {
             "name": "privateFrontend",
             "properties": {
-              "privateIPAddress": "10.0.0.4",
+              "privateIPAddress": "192.168.0.4",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstepVnet', 'appGatewaySubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'VNet-AppGateW', 'subnet1')]"
               }
             }
           }
