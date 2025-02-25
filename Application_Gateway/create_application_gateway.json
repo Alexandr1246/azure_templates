@@ -9,8 +9,9 @@
       "name": "Mystat",
       "properties": {
         "sku": {
-          "name": "Standard_V2",
-          "tier": "Standard_V2"
+          "name": "Standard_v2",
+          "tier": "Standard_v2",
+          "capacity": 2
         },
         "gatewayIPConfigurations": [
           {
@@ -59,8 +60,7 @@
               "frontendPort": {
                 "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
               },
-              "protocol": "Http",
-              "requireServerNameIndication": false
+              "protocol": "Http"
             }
           },
           {
@@ -72,8 +72,7 @@
               "frontendPort": {
                 "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
               },
-              "protocol": "Http",
-              "requireServerNameIndication": false
+              "protocol": "Http"
             }
           }
         ],
@@ -98,41 +97,20 @@
             "properties": {
               "port": 80,
               "protocol": "Http",
-              "cookieBasedAffinity": "Disabled",
-              "requestTimeout": "20",
-              "probe": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/probes', 'Mystat', 'httpProbe')]"
-              }
+              "cookieBasedAffinity": "Disabled"
             }
           }
         ],
-        "httpListeners": [
+        "probes": [
           {
-            "name": "httpListener",
+            "name": "httpProbe",
             "properties": {
-              "frontendIPConfiguration": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'publicFrontend')]"
-              },
-              "frontendPort": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
-              },
               "protocol": "Http",
-              "requireServerNameIndication": false
-            }
-          }
-        ],
-        "urlPathMaps": [
-          {
-            "name": "urlPathMap",
-            "properties": {
-              "defaultBackendAddressPool": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', 'Mystat', 'backendPool')]"
-              },
-              "defaultBackendHttpSettings": {
-                "id": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', 'Mystat', 'httpSettings')]"
-              },
-              "defaultRedirectConfiguration": null,
-              "pathRules": []
+              "host": "localhost",
+              "path": "/health",
+              "interval": "30",
+              "timeout": "30",
+              "unhealthyThreshold": "3"
             }
           }
         ]
