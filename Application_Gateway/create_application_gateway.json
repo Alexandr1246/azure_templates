@@ -1,143 +1,138 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "eastus",
-      "metadata": {
-        "description": "Location for all resources."
-      }
-    }
-  },
   "resources": [
     {
       "type": "Microsoft.Network/applicationGateways",
       "apiVersion": "2021-05-01",
+      "location": "[resourceGroup().location]",
       "name": "Mystat",
-      "location": "[parameters('location')]",
       "properties": {
         "sku": {
-          "name": "Standard_v2",
-          "tier": "Standard_v2",
-          "capacity": 2
+          "name": "Standard_V2",
+          "tier": "Standard_V2"
         },
         "gatewayIPConfigurations": [
           {
-            "name": "appGatewayIpConfig",
+            "name": "appGatewayConfig",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'MyVNet', 'AppGatewaySubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstepVnet', 'appGatewaySubnet')]"
               }
             }
           }
         ],
         "frontendIPConfigurations": [
           {
-            "name": "PublicFrontEnd",
+            "name": "publicFrontend",
             "properties": {
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'MyPublicIP')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'appGatewayPublicIP')]"
               }
             }
           },
           {
-            "name": "InternalFrontEnd",
+            "name": "privateFrontend",
             "properties": {
-              "privateIPAddress": "10.0.0.10",
-              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "10.0.0.4",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'MyVNet', 'InternalSubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'itstepVnet', 'appGatewaySubnet')]"
               }
+            }
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "httpPort",
+            "properties": {
+              "port": 80
+            }
+          }
+        ],
+        "listeners": [
+          {
+            "name": "publicListener",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'publicFrontend')]"
+              },
+              "frontendPort": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
+              },
+              "protocol": "Http",
+              "requireServerNameIndication": false
+            }
+          },
+          {
+            "name": "privateListener",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'privateFrontend')]"
+              },
+              "frontendPort": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
+              },
+              "protocol": "Http",
+              "requireServerNameIndication": false
             }
           }
         ],
         "backendAddressPools": [
           {
-            "name": "ServerBackendPool",
+            "name": "backendPool",
             "properties": {
               "backendAddresses": [
                 {
-                  "ipAddress": "10.0.0.100"
+                  "ipAddress": "10.0.0.5"
+                },
+                {
+                  "ipAddress": "10.0.0.6"
                 }
               ]
             }
           }
         ],
+        "backendHttpSettingsCollection": [
+          {
+            "name": "httpSettings",
+            "properties": {
+              "port": 80,
+              "protocol": "Http",
+              "cookieBasedAffinity": "Disabled",
+              "requestTimeout": "20",
+              "probe": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/probes', 'Mystat', 'httpProbe')]"
+              }
+            }
+          }
+        ],
         "httpListeners": [
           {
-            "name": "PublicHttpListener",
+            "name": "httpListener",
             "properties": {
               "frontendIPConfiguration": {
-                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', 'Mystat'), '/frontendIPConfigurations/PublicFrontEnd')]"
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', 'Mystat', 'publicFrontend')]"
+              },
+              "frontendPort": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', 'Mystat', 'httpPort')]"
               },
               "protocol": "Http",
-              "port": 80
+              "requireServerNameIndication": false
             }
-          },
+          }
+        ],
+        "urlPathMaps": [
           {
-            "name": "InternalHttpListener",
+            "name": "urlPathMap",
             "properties": {
-              "frontendIPConfiguration": {
-                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', 'Mystat'), '/frontendIPConfigurations/InternalFrontEnd')]"
+              "defaultBackendAddressPool": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', 'Mystat', 'backendPool')]"
               },
-              "protocol": "Http",
-              "port": 80
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/routeTables",
-      "apiVersion": "2021-05-01",
-      "name": "itstep-route-table",
-      "location": "[parameters('location')]",
-      "properties": {
-        "routes": [
-          {
-            "name": "academy-route",
-            "properties": {
-              "addressPrefix": "10.0.0.0/8",
-              "nextHopType": "VirtualNetworkGateway"
-            }
-          },
-          {
-            "name": "work-route",
-            "properties": {
-              "addressPrefix": "172.16.0.0/16",
-              "nextHopType": "VirtualNetworkGateway"
-            }
-          },
-          {
-            "name": "student-route",
-            "properties": {
-              "addressPrefix": "192.168.0.0/24",
-              "nextHopType": "VirtualNetworkGateway"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/routeTables",
-      "apiVersion": "2021-05-01",
-      "name": "student-route-table",
-      "location": "[parameters('location')]",
-      "properties": {
-        "routes": [
-          {
-            "name": "external-network-route-1",
-            "properties": {
-              "addressPrefix": "1.0.0.0/8",
-              "nextHopType": "VirtualNetworkGateway"
-            }
-          },
-          {
-            "name": "external-network-route-2",
-            "properties": {
-              "addressPrefix": "8.0.0.0/8",
-              "nextHopType": "VirtualNetworkGateway"
+              "defaultBackendHttpSettings": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', 'Mystat', 'httpSettings')]"
+              },
+              "defaultRedirectConfiguration": null,
+              "pathRules": []
             }
           }
         ]
