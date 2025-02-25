@@ -1,5 +1,5 @@
 on:
-  push:
+  pull_request:
     paths:
       - 'Application_Gateway/**'
   workflow_dispatch:
