@@ -4,7 +4,7 @@ on:
       - 'Load_Balancer/**'
   workflow_dispatch:
 
-name: Run Azure Login With a Service Principal Secret
+name: Run Load Balancer
 
 jobs:
   build-and-deploy:

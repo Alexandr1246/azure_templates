@@ -1,0 +1,147 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2021-05-01",
+      "name": "Mystat",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "Standard_v2",
+          "tier": "Standard_v2",
+          "capacity": 2
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "appGatewayIpConfig",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'MyVNet', 'AppGatewaySubnet')]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "PublicFrontEnd",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'MyPublicIP')]"
+              }
+            }
+          },
+          {
+            "name": "InternalFrontEnd",
+            "properties": {
+              "privateIPAddress": "10.0.0.10",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'MyVNet', 'InternalSubnet')]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "ServerBackendPool",
+            "properties": {
+              "backendAddresses": [
+                {
+                  "ipAddress": "10.0.0.100"
+                }
+              ]
+            }
+          }
+        ],
+        "httpListeners": [
+          {
+            "name": "PublicHttpListener",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', 'Mystat'), '/frontendIPConfigurations/PublicFrontEnd')]"
+              },
+              "protocol": "Http",
+              "port": 80
+            }
+          },
+          {
+            "name": "InternalHttpListener",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', 'Mystat'), '/frontendIPConfigurations/InternalFrontEnd')]"
+              },
+              "protocol": "Http",
+              "port": 80
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2021-05-01",
+      "name": "itstep-route-table",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "academy-route",
+            "properties": {
+              "addressPrefix": "10.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "work-route",
+            "properties": {
+              "addressPrefix": "172.16.0.0/16",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "student-route",
+            "properties": {
+              "addressPrefix": "192.168.0.0/24",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2021-05-01",
+      "name": "student-route-table",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "external-network-route-1",
+            "properties": {
+              "addressPrefix": "1.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          },
+          {
+            "name": "external-network-route-2",
+            "properties": {
+              "addressPrefix": "8.0.0.0/8",
+              "nextHopType": "VirtualNetworkGateway"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
