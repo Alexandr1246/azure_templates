@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Network/dnsZones",
+            "apiVersion": "2018-05-01",
+            "name": "itstep-project.online",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnsZones/A",
+            "apiVersion": "2018-05-01",
+            "name": "itstep-project.online/dns1",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnsZones', 'itstep-project.online')]"
+            ],
+            "properties": {
+                "TTL": 3600,
+                "ARecords": [
+                    { "ipv4Address": "208.67.222.222" }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnsZones/A",
+            "apiVersion": "2018-05-01",
+            "name": "itstep-project.online/dns2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnsZones', 'itstep-project.online')]"
+            ],
+            "properties": {
+                "TTL": 3600,
+                "ARecords": [
+                    { "ipv4Address": "208.67.220.220" }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnsZones/MX",
+            "apiVersion": "2018-05-01",
+            "name": "itstep-project.online/@",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnsZones', 'itstep-project.online')]"
+            ],
+            "properties": {
+                "TTL": 3600,
+                "MXRecords": [
+                    { "preference": 10, "exchange": "aspmx.l.google.com." },
+                    { "preference": 20, "exchange": "alt1.aspmx.l.google.com." },
+                    { "preference": 30, "exchange": "aspmx2.googlemail.com." }
+                ]
+            }
+        }
+    ]
+}
