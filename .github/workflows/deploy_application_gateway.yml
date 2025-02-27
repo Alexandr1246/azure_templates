@@ -31,4 +31,12 @@ jobs:
 
     - name: Deploy Virtual Network
       run: |
-        az deployment group create --resource-group Student --template-file Load_Balancer/application_gateway_network.json
+        az deployment group create --resource-group Student --template-file Load_Balancer/create_vn.json
+
+    - name: Deploy Route Table
+      run: |
+        az deployment group create --resource-group Student --template-file Load_Balancer/create_route_table.json
+
+    - name: Deploy Application Gateway
+      run: | 
+        az deployment group create --resource-group Student --template-file application_gateway_template.json --parameters application_gateway_parameters.json
