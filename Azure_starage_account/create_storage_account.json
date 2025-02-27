@@ -13,7 +13,54 @@
       "kind": "StorageV2",
       "properties": {
         "supportsHttpsTrafficOnly": true
-      }
+      },
+      "resources": [
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2021-09-01",
+          "name": "default/itstep",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', 'olexandrshamarin')]"
+          ],
+          "properties": {}
+        },
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2021-09-01",
+          "name": "default/student",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', 'olexandrshamarin')]"
+          ],
+          "properties": {}
+        },
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2021-09-01",
+          "name": "default/mb322",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', 'olexandrshamarin')]"
+          ],
+          "properties": {}
+        },
+        {
+          "type": "fileServices/shares",
+          "apiVersion": "2021-09-01",
+          "name": "default/odesa",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', 'olexandrshamarin')]"
+          ],
+          "properties": {}
+        },
+        {
+          "type": "fileServices/shares",
+          "apiVersion": "2021-09-01",
+          "name": "default/olexandrshamarin",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', 'olexandrshamarin')]"
+          ],
+          "properties": {}
+        }
+      ]
     }
   ]
 }
