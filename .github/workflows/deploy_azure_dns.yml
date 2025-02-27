@@ -1,7 +1,7 @@
 on:
   pull_request:
     paths:
-      - 'Application_Gateway/**'
+      - 'Azure_dns/**'
   workflow_dispatch:
 
 name: Run Application Gateway
@@ -29,6 +29,10 @@ jobs:
       run: |
         az group create --name Student --location eastus || echo "Resource Group already exists"
 
-    - name: Deploy Virtual Network
+    - name: Deploy Private dns
       run: |
-        az deployment group create --resource-group Student --template-file Load_Balancer/application_gateway_network.json
+        az deployment group create --resource-group Student --template-file Azure_dns/azure_dns.json
+
+    - name: Deploy Public dns
+      run: |
+        az deployment group create --resource-group Student --template-file Azure_dns/public_dns_zone.json
