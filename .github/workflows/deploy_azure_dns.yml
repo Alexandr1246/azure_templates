@@ -1,0 +1,34 @@
+on:
+  pull_request:
+    paths:
+      - 'Application_Gateway/**'
+  workflow_dispatch:
+
+name: Run Application Gateway
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure CLI script
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az account show
+
+    - name: Create Resource Group (if not exists)
+      run: |
+        az group create --name Student --location eastus || echo "Resource Group already exists"
+
+    - name: Deploy Virtual Network
+      run: |
+        az deployment group create --resource-group Student --template-file Load_Balancer/application_gateway_network.json
