@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-05-01",
+      "name": "itstep",
+      "location": "East US",
+      "properties": {
+        "addressSpace": { "addressPrefixes": ["10.0.0.0/8"] },
+        "subnets": [
+          { "name": "Odesa", "properties": { "addressPrefix": "10.1.0.0/24" } },
+          { "name": "Chernigiv", "properties": { "addressPrefix": "10.2.0.0/25" } },
+          { "name": "Ivano-Frankivsk", "properties": { "addressPrefix": "10.3.0.0/26" } }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-05-01",
+      "name": "work",
+      "location": "East US",
+      "properties": {
+        "addressSpace": { "addressPrefixes": ["172.16.0.0/16"] },
+        "subnets": [
+          { "name": "office1", "properties": { "addressPrefix": "172.16.10.0/17" } },
+          { "name": "office2", "properties": { "addressPrefix": "172.16.20.0/18" } },
+          { "name": "office3", "properties": { "addressPrefix": "172.16.32.0/19" } }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2022-05-01",
+      "name": "student",
+      "location": "East US",
+      "properties": {
+        "addressSpace": { "addressPrefixes": ["192.168.0.0/16"] },
+        "subnets": [
+          { "name": "home1", "properties": { "addressPrefix": "192.168.1.0/27" } },
+          { "name": "home2", "properties": { "addressPrefix": "192.168.2.0/28" } },
+          { "name": "home3", "properties": { "addressPrefix": "192.168.3.0/29" } }
+        ]
+      }
+    }
+  ]
+}
