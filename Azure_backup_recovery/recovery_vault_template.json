@@ -1,63 +1,51 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "resources": [
-    {
-      "type": "Microsoft.RecoveryServices/vaults",
-      "apiVersion": "2021-08-01",
-      "name": "itstepRecoveryVault",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "sku": {
-          "name": "Standard"
-        }
-      }
-    },
-    {
-      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
-      "apiVersion": "2021-08-01",
-      "name": "[concat('itstepRecoveryVault/Azure/protectionContainers/', variables('protectionContainerName'), '/protectedItems/', variables('protectedItemName'))]",
-      "properties": {
-        "protectedItemType": "Microsoft.Compute/virtualMachines",
-        "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('vmName'))]",
-        "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', 'itstepRecoveryVault', variables('backupPolicyName'))]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.RecoveryServices/vaults', 'itstepRecoveryVault')]"
-      ]
-    },
-    {
-      "type": "Microsoft.RecoveryServices/vaults/backupPolicies",
-      "apiVersion": "2021-08-01",
-      "name": "[concat('itstepRecoveryVault/', variables('backupPolicyName'))]",
-      "properties": {
-        "backupManagementType": "AzureIaasVM",
-        "schedulePolicy": {
-          "schedulePolicyType": "SimpleSchedulePolicy",
-          "scheduleRunFrequency": "Daily",
-          "scheduleRunTimes": [
-            "2025-02-28T22:00:00Z"
-          ]
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
         },
-        "retentionPolicy": {
-          "retentionPolicyType": "LongTermRetentionPolicy",
-          "dailySchedule": {
-            "retentionDuration": {
-              "count": 30,
-              "durationType": "Days"
-            }
-          }
+        "location": {
+            "type": "string"
+        },
+        "apiVersion": {
+            "type": "string"
+        },
+        "publicNetworkAccess": {
+            "type": "string"
+        },
+        "immutabilityState": {
+            "type": "string"
+        },
+        "standardTierStorageRedundancy": {
+            "type": "string"
+        },
+        "crossRegionRestore": {
+            "type": "string"
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.RecoveryServices/vaults', 'itstepRecoveryVault')]"
-      ]
-    }
-  ],
-  "variables": {
-    "vmName": "yourAzureVMName",
-    "backupPolicyName": "dailyBackupPolicy",
-    "protectionContainerName": "iaasvmcontainer;iaasvmcontainerv2;yourAzureVMName",
-    "protectedItemName": "vm;iaasvmcontainerv2;yourAzureVMName"
-  }
+    },
+    "resources": [
+        {
+            "apiVersion": "[parameters('apiVersion')]",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "type": "Microsoft.RecoveryServices/vaults",
+            "sku": {
+                "name": "RS0",
+                "tier": "Standard"
+            },
+            "properties": {
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+                "securitySettings": {
+                    "immutabilitySettings": {
+                        "state": "[parameters('immutabilityState')]"
+                    }
+                },
+                "redundancySettings": {
+                    "standardTierStorageRedundancy": "[parameters('standardTierStorageRedundancy')]",
+                    "crossRegionRestore": "[parameters('crossRegionRestore')]"
+                }
+            }
+        }
+    ]
 }

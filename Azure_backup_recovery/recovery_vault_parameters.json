@@ -11,6 +11,9 @@
         "apiVersion": {
             "value": "2023-08-01"
         },
+        "immutabilityState": {
+            "value": "Disabled"
+        },
         "standardTierStorageRedundancy": {
             "value": "GeoRedundant"
         },

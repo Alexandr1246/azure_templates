@@ -6,16 +6,13 @@
             "value": "eastus"
         },
         "networkInterfaceName1": {
-            "value": "test-1158_z1"
+            "value": "test124_z1"
         },
         "enableAcceleratedNetworking": {
             "value": true
         },
-        "networkInterfaceName2": {
-            "value": "test-1351_z2"
-        },
         "networkSecurityGroupName": {
-            "value": "test-1-nsg"
+            "value": "test-nsg"
         },
         "networkSecurityGroupRules": {
             "value": [
@@ -38,7 +35,7 @@
             "value": "default"
         },
         "virtualNetworkName": {
-            "value": "test-1-vnet"
+            "value": "test-vnet"
         },
         "addressPrefixes": {
             "value": [
@@ -56,7 +53,7 @@
             ]
         },
         "publicIpAddressName1": {
-            "value": "test-1-ip"
+            "value": "test-ip"
         },
         "publicIpAddressType": {
             "value": "Static"
@@ -68,19 +65,19 @@
             "value": "Detach"
         },
         "virtualMachineName": {
-            "value": "test-1"
+            "value": "test"
         },
         "virtualMachineName1": {
-            "value": "test-1"
+            "value": "test"
         },
         "virtualMachineComputerName1": {
-            "value": "test-1"
+            "value": "test"
         },
         "virtualMachineRG": {
             "value": "Student"
         },
         "osDiskType": {
-            "value": "StandardSSD_LRS"
+            "value": "Premium_LRS"
         },
         "osDiskDeleteOption": {
             "value": "Delete"
@@ -97,20 +94,14 @@
         "adminUsername": {
             "value": "azureuser"
         },
+        "adminPassword": {
+            "value": null
+        },
         "enablePeriodicAssessment": {
             "value": "ImageDefault"
         },
-        "virtualMachineName2": {
-            "value": "test-2"
-        },
-        "virtualMachineComputerName2": {
-            "value": "test-2"
-        },
         "virtualMachine1Zone": {
             "value": "1"
-        },
-        "virtualMachine2Zone": {
-            "value": "2"
         }
     }
 }
