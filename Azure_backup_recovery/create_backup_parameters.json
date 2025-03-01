@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "armProviderNamespace": {
+            "value": "Microsoft.RecoveryServices"
+        },
+        "vaultSubID": {
+            "value": "ea8c2c31-af92-413a-9f75-317f2a7625e9"
+        },
+        "vaultRG": {
+            "value": "Student"
+        },
+        "vaultName": {
+            "value": "itstep-local"
+        },
+        "policyName": {
+            "value": "EnhancedPolicy"
+        },
+        "fabricName": {
+            "value": "Azure"
+        },
+        "protectionContainers": {
+            "value": [
+                "IaasVMContainer;iaasvmcontainerv2;student;test"
+            ]
+        },
+        "protectedItems": {
+            "value": [
+                "vm;iaasvmcontainerv2;student;test"
+            ]
+        },
+        "sourceResourceIds": {
+            "value": [
+                "/subscriptions/ea8c2c31-af92-413a-9f75-317f2a7625e9/resourceGroups/Student/providers/Microsoft.Compute/virtualMachines/test"
+            ]
+        },
+        "extendedProperties": {
+            "value": [
+                {}
+            ]
+        }
+    }
+}
