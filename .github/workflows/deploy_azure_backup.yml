@@ -1,10 +1,10 @@
 on:
   pull_request:
     paths:
-      - 'Application_Gateway/**'
+      - 'Azure_backup_recovery/**'
   workflow_dispatch:
 
-name: Run Application Gateway
+name: Run Deploy BackUp Config
 
 jobs:
   build-and-deploy:
@@ -25,18 +25,10 @@ jobs:
         inlineScript: |
           az account show
 
-    - name: Create Resource Group (if not exists)
-      run: |
-        az group create --name Student --location eastus || echo "Resource Group already exists"
-
-    - name: Deploy Virtual Network
-      run: |
-        az deployment group create --resource-group Student --template-file Load_Balancer/create_vn.json
-
-    - name: Deploy Route Table
-      run: |
-        az deployment group create --resource-group Student --template-file Load_Balancer/create_route_table.json
-
-    - name: Deploy Application Gateway
+    - name: Deploy BackUp Config
       run: | 
-        az deployment group create --resource-group Student --template-file application_gateway_template.json --parameters application_gateway_parameters.json
+        az deployment group create --resource-group Student --template-file create_backup_template.json --parameters create_backup_parameters.json
+
+    - name: Deploy Recovery Vault
+      run: |
+        az deployment group create --resource-group Student --template-file recovery_vault_template.json --parameters recovery_vault_parameters.json

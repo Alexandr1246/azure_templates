@@ -29,6 +29,6 @@ jobs:
       run: |
         az group create --name Student --location eastus || echo "Resource Group already exists"
 
-    - name: Deploy Private dns
+    - name: Deploy Storage Account
       run: |
         az deployment group create --resource-group Student --template-file Azure_storage_account/create_storage_account.json
