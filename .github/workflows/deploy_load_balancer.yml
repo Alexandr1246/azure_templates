@@ -1,7 +1,7 @@
 on:
   pull_request:
     paths:
-      - 'Load_Balancer/**'
+      - 'Azure_load_balancer/**'
   workflow_dispatch:
 
 name: Run Load Balancer
